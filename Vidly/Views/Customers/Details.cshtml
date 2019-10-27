@@ -12,4 +12,11 @@
 else
 {
     <h2>@Model.customerName</h2>
+    <ul>
+        <li>Membership Type:@Model.membershipType.name</li>
+        @if(@Model.birthdate.HasValue)
+        {
+            <li>Birthdate:@Model.birthdate.Value.ToShortDateString()</li>
+        }
+    </ul>
 }

@@ -4,17 +4,30 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
-using Vidly.ViewModels;
+using System.Data.Entity;
 
 namespace Vidly.Controllers
 {
     public class CustomersController : Controller
     {
-        //List<Customers> customers;
+        ApplicationDbContext _context;
+
+        public CustomersController()
+        {
+            _context = new ApplicationDbContext();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+            
+            base.Dispose(disposing);
+        }
+
         // GET: Customers
         public ActionResult Index()
         {
-            var customers = GetCustomers();
+            var customers = _context.customers.Include(c => c.membershipType).ToList();  //GetCustomers();
             return View(customers);
         }
 
@@ -22,7 +35,7 @@ namespace Vidly.Controllers
         //[Route("Customers/Details/{custId:regex(\\d)}")]
         public ActionResult Details(int custId)
         {
-            var customer = GetCustomers().SingleOrDefault(c => c.customerId == custId);
+            var customer = _context.customers.Include(c => c.membershipType).SingleOrDefault(c => c.customerId == custId);
 
             if (customer == null)
             {
@@ -30,17 +43,6 @@ namespace Vidly.Controllers
             }
             else
                 return View(customer);
-        }
-
-        private IEnumerable<Customers> GetCustomers()
-        {
-            return new List<Customers>
-            {
-                new Customers { customerId = 1, customerName = "John Smith" },
-                new Customers { customerId = 2, customerName = "Mary Williams" },
-                new Customers { customerId = 3 , customerName="Ahmed Elsabagh"},
-                new Customers { customerId = 4, customerName ="Amr Fetait"}
-            };
         }
     }
 }
