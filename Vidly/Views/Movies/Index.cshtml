@@ -12,13 +12,13 @@
 }
 else
 {
+    @Html.ActionLink("New Movie", "new", "Movies", null, new { @class = "btn btn-primary" });
     <table class="table table-­bordered table‐hover">
-        <caption>Movies Data</caption>
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Customer</th>
-                <th>Customer2</th>
+                <th>View Movie</th>
+                <th>Edit Movie</th>
             </tr>
         </thead>
         <tbody>
@@ -27,9 +27,7 @@ else
                 <tr class="active">
                     <td>@movie.id </td>
                     <td>@Html.ActionLink(movie.Name, "Details/" + @movie.id) </td>
-                    <td>@Html.ActionLink(movie.Name, "Details", "Movies", new { custId = movie.id }, null)</td>
-
-                    @*, "Customers", new { custId = @item.customerId },null)*@
+                    <td>@Html.ActionLink(movie.Name, "Edit", "Movies", new { id = movie.id }, null)</td>
                 </tr>
             }
 

@@ -21,7 +21,10 @@ namespace Vidly.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Customers> customers { get; set; }
+        public DbSet<MembershipType> membershipTypes { get; set; }
         public DbSet<Movies> movies { get; set; }
+        public DbSet<Genre> genres { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

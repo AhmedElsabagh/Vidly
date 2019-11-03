@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
 using System.Data.Entity;
+using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
@@ -32,7 +33,7 @@ namespace Vidly.Controllers
         }
 
         //Customers/Details/1
-        //[Route("Customers/Details/{custId:regex(\\d)}")]
+        [Route("Customers/Details/{custId}")]
         public ActionResult Details(int custId)
         {
             var customer = _context.customers.Include(c => c.membershipType).SingleOrDefault(c => c.customerId == custId);
@@ -43,6 +44,44 @@ namespace Vidly.Controllers
             }
             else
                 return View(customer);
+        }
+
+        public ActionResult New()
+        {
+            var viewModel = new CustomerDataViewModel
+            {
+                membershipTypes = _context.membershipTypes.ToList()
+            };
+
+            return View("CustomerData", viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Save(Customers customer)
+        {
+            if (customer.customerId == 0)
+                _context.customers.Add(customer);
+            else
+            {
+                var customerDB = _context.customers.Single(c => c.customerId == customer.customerId);
+                customerDB.customerName = customer.customerName;
+                customerDB.birthdate = customer.birthdate;
+                customerDB.isSubscripedToNewsletter = customer.isSubscripedToNewsletter;
+                customerDB.membershipTypeId = customer.membershipTypeId;
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Customers");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var viewModel = new CustomerDataViewModel
+            {
+                membershipTypes = _context.membershipTypes.ToList(),
+                customer = _context.customers.SingleOrDefault(c=> c.customerId == id)
+            };
+
+            return View("CustomerData", viewModel);
         }
     }
 }

@@ -15,13 +15,14 @@
 }
 else
 {
+    @Html.ActionLink("New Customer","new","Customers",null, new { @class = "btn btn-primary"});
+
     <table class="table table-­bordered table‐hover">
-        <caption>Customer Data</caption>
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Customer</th>
-                <th>Customer2</th>
+                <th>View Customer</th>
+                <th>Edit Customer</th>
                 <th>Membership Type</th>
                 <th>Discount Rate</th>
             </tr>
@@ -32,7 +33,7 @@ else
             <tr class="active">
                 <td>@item.customerId </td>
                 <td>@Html.ActionLink(item.customerName, "Details/" + item.customerId) </td>
-                <td>@Html.ActionLink(item.customerName, "Details", "Customers", new { custId = item.customerId }, null)</td>
+                <td>@Html.ActionLink(item.customerName, "Edit", "Customers", new { id = item.customerId }, null)</td>
                 <td>@item.membershipType.name</td>
                 <td>@item.membershipType.DiscountRate%</td>
 
