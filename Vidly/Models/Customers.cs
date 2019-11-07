@@ -12,12 +12,13 @@ namespace Vidly.Models
         [Key]
         public int customerId { get; set; }
 
-        [Required]
-        [MaxLength(255)]
+        [Required(ErrorMessage ="Please enter customer's name.")]
+        [StringLength(255)]
         [Display(Name = "Name")]
         public string customerName { get; set; }
 
         [Display(Name = "Date of Birth")]
+        [Min18YearsIfAMember]
         public DateTime? birthdate { get; set; }
 
         public bool isSubscripedToNewsletter { get; set; }

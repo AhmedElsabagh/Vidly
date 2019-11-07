@@ -43,17 +43,27 @@ namespace Vidly.Controllers
 
         public ActionResult New()
         {
-            var viewModel = new MovieDataViewModel
+            var viewModel = new MovieDataViewModel()
             {
-                genres = _context.genres.ToList()
+                genres = _context.genres.ToList(),
             };
 
             return View("MovieData",viewModel);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Movies movie)
         {
+            if(!ModelState.IsValid)
+            {
+                var viewModel = new MovieDataViewModel(movie)
+                {
+                    genres = _context.genres.ToList()
+                };
+
+                return View("MovieData", viewModel);
+            }
             //Movies movies = viewModel.movie;
             if (movie.id == 0)
             {
@@ -82,10 +92,9 @@ namespace Vidly.Controllers
 
         public ActionResult Edit(int id)
         {
-            var viewModel = new MovieDataViewModel
+            var viewModel = new MovieDataViewModel(_context.movies.SingleOrDefault(m => m.id == id))
             {
-                genres = _context.genres.ToList(),
-                movie = _context.movies.SingleOrDefault(m => m.id == id)
+                genres = _context.genres.ToList()
             };
             return View("MovieData", viewModel);
         }
